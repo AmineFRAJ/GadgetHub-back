@@ -34,6 +34,7 @@ exports.addProduct = async (req, res) => {
     await newProduct.save();
     res.status(200).send({ msg: "Product added successfully", newProduct });
   } catch (error) {
+    console.log(error.message)
     res.status(500).send(error);
   }
 };
