@@ -12,7 +12,7 @@ exports.test = async (req, res) => {
   };
   
   // register
-exports.register = async (req, res) => {
+exports.register = async (req, res) => { 
     try {
         let {name, email, password, phone} = req.body
 

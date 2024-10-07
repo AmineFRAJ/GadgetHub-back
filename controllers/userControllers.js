@@ -13,7 +13,7 @@ exports.getUsers = async (req, res) => {
     try {
       const users = await User.find();
       if (users.length === 0) {
-        return res.status(404).send({ msg: "No cars found" });
+        return res.status(404).send({ msg: "No user found" });
       }
       res.status(200).send(users);
     } catch (error) {
