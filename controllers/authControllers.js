@@ -4,71 +4,84 @@ const jwt = require("jsonwebtoken");
 
 // test
 exports.test = async (req, res) => {
-    try {
-      res.status(200).send("Test auth OK");
-    } catch (error) {
-      res.status(400).send(error);
+  try {
+    res.status(200).send("Test auth OK");
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+// register
+exports.register = async (req, res) => {
+  try {
+    let { name, email, password, phone } = req.body;
+    
+
+    let foundUser = await User.findOne({ email });
+
+    if (foundUser) {
+      return res.status(400).send({ errors: [{ msg: "Email already used" }] });
     }
-  };
-  
-  // register
-exports.register = async (req, res) => { 
-    try {
-        let {name, email, password, phone} = req.body
 
-        let foundUser = await User.findOne({email})
+    const salt = 10;
+    let hashedPassword = await bcrypt.hash(password, salt);
 
-        if (foundUser) {
-          return  res.status(400).send({errors: [{msg: "Email already used"}]})
-        }
+    let newUser = await new User({ ...req.body });
 
-        const salt = 10
-        let hashedPassword = await bcrypt.hash(password, salt)
+    newUser.password = hashedPassword;
 
-        let newUser = await new User({...req.body})
+    await newUser.save();
 
-        newUser.password = hashedPassword
+    const token = jwt.sign(
+      {
+        id: newUser._id,
+      },
+      process.env.SECRET_KEY
+    );
 
-        await newUser.save()
-
-        const token = jwt.sign({
-            id: newUser._id
-        }, process.env.SECRET_KEY)
-
-        res.status(200).send({success: [{msg: "Register Successfully !"}], newUser, token})
-
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send({errors: [{msg: "Can not register"}]})
-    }
-}
-// login 
+    res
+      .status(200)
+      .send({ success: [{ msg: "Register Successfully !" }], newUser, token });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ errors: [{ msg: "Can not register" }] });
+  }
+};
+// login
 exports.login = async (req, res) => {
   try {
-      let {email, password} = req.body
+    let { email, password } = req.body;
 
-      let foundUser = await User.findOne({email})
+    let foundUser = await User.findOne({ email });
 
-      if (!foundUser) {
-        return  res.status(400).send({errors: [{msg: "No user found with this email address"}]})
-      }
+    if (!foundUser) {
+      return res
+        .status(400)
+        .send({ errors: [{ msg: "No user found with this email address" }] });
+    }
 
-      let hashedPassword = await bcrypt.compare(password, foundUser.password)
+    let hashedPassword = await bcrypt.compare(password, foundUser.password);
 
-      if (!hashedPassword) {
-        return  res.status(400).send({errors: [{msg: "Incorrect password"}]})
-      }
+    if (!hashedPassword) {
+      return res.status(400).send({ errors: [{ msg: "Incorrect password" }] });
+    }
 
-              const token = jwt.sign(
-                {
-                  id: foundUser._id,
-                },
-                process.env.SECRET_KEY,
-              );
+    const token = jwt.sign(
+      {
+        id: foundUser._id,
+      },
+      process.env.SECRET_KEY
+    );
 
-      res.status(200).send({success: [{msg: `Hello ${foundUser.name} Welcome Back !`}], foundUser, token})
+    res
+      .status(200)
+      .send({
+        success: [{ msg: `Hello ${foundUser.name} Welcome Back !` }],
+        foundUser,
+        token,
+      });
   } catch (error) {
-      console.error(error.message);
-      res.status(400).send({errors: [{msg: "Can not login"}]})
+    console.error(error.message);
+    res.status(400).send({ errors: [{ msg: "Can not login" }] });
   }
-}
+};
