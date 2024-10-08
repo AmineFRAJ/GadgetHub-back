@@ -32,10 +32,10 @@ exports.addProduct = async (req, res) => {
       image,
     });
     await newProduct.save();
-    res.status(200).send({ msg: "Product added successfully", newProduct });
+    res.status(200).send({success: [{ msg: "Product added successfully" }], newProduct });
   } catch (error) {
     console.log(error.message)
-    res.status(500).send(error);
+    res.status(500).send({ errors: [{ msg: "Can not add" }] });
   }
 };
 
