@@ -5,10 +5,8 @@ const app = express();
 
 const cors = require("cors");
 
-app.use(cors({
-  origin: "https://gadget-hub-client-dldab9jg3-aminefrajs-projects.vercel.app", // front-end URL
-  credentials: true
-}));
+app.use(cors());
+
 
 app.use(express.json());
 
