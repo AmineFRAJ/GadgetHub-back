@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app = express();
 
-const allowedOrigins = ['https://gadget-hub-client-git-master-aminefrajs-projects.vercel.app/'];
+const allowedOrigins = ['https://gadget-hub-client-gyv22do09-aminefrajs-projects.vercel.app/'];
 
 app.use(cors({
   origin: function (origin, callback) {
