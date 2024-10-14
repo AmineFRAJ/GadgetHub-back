@@ -1,10 +1,10 @@
 {
   "name": "back",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "front": "cd ../client && npm start",
-    "back": "nodemon server.js",
+    "back": "nodemon index.js",
     "dev": "concurrently \"npm run front\" \"npm run back\""
   },
   "author": "",
