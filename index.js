@@ -3,13 +3,12 @@ const express = require("express");
 
 const app = express();
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', 'https://gadget-hub-client-63oq20pek-aminefrajs-projects.vercel.app/'); // Allow frontend origin
-//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-//   res.header('Access-Control-Allow-Credentials', 'true'); // Allow cookies if needed
-//   next();
-// });
+const cors = require("cors");
+
+app.use(cors({
+  origin: "https://gadget-hub-client-dldab9jg3-aminefrajs-projects.vercel.app", // front-end URL
+  credentials: true
+}));
 
 app.use(express.json());
 
