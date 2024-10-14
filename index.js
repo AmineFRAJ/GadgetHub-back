@@ -1,21 +1,15 @@
 const express = require("express");
 
-const cors = require('cors');
 
 const app = express();
 
-const allowedOrigins = ['https://gadget-hub-client-f2eu0f9cn-aminefrajs-projects.vercel.app'];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://gadget-hub-client-f2eu0f9cn-aminefrajs-projects.vercel.app'); // Allow frontend origin
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Credentials', 'true'); // Allow cookies if needed
+  next();
+});
 
 app.use(express.json());
 
